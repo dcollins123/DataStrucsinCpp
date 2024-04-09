@@ -1,0 +1,247 @@
+To evaluate the runtime and memory usage of the three data structures (vector, hash table, and tree) for the given requirements, we'll consider the operations of opening a file, reading data, parsing lines, checking for formatting errors, and creating course objects.
+
+### Vector
+
+- **Runtime:** The primary operations involved in using a vector for this application are appending courses to the vector and searching for a specific course. Appending a course to a vector is generally an O(1) operation, but it can occasionally require resizing the vector, which is an O(n) operation. Searching for a course in an unsorted vector is an O(n) operation.
+- **Memory:** Vectors typically use contiguous memory, which can be efficient for storage but may require large blocks of memory to be available for resizing.
+- **Advantages:** Simple to implement and use; provides fast access to elements by index.
+- **Disadvantages:** Requires resizing; searching is slow unless the vector is sorted, in which case insertion becomes slower (O(n)).
+
+### Hash Table
+
+- **Runtime:** Inserting a course into a hash table and searching for a course are both O(1) operations on average. However, in the worst case (e.g., many hash collisions), these operations can degrade to O(n).
+- **Memory:** Hash tables can be memory-efficient, but they may allocate more space than necessary to reduce the likelihood of collisions.
+- **Advantages:** Fast insertion and search operations; no need to maintain sorted order.
+- **Disadvantages:** Memory usage can be higher than necessary; worst-case performance can be poor; hash function needs to be well-designed.
+
+### Tree (Binary Search Tree)
+
+- **Runtime:** For a balanced binary search tree (BST), inserting a course and searching for a course are both O(log n) operations. However, if the tree becomes unbalanced, these operations can degrade to O(n).
+- **Memory:** BSTs generally use memory efficiently, with each node only storing pointers to its children and its data.
+- **Advantages:** Maintains sorted order; efficient search and insertion in the average case.
+- **Disadvantages:** Can become unbalanced; deletion can be complex.
+
+### Recommendation
+
+Based on the analysis, each data structure has its strengths and weaknesses. The choice of data structure depends on the specific requirements of the application:
+
+- If the primary requirement is fast insertion and search, and memory usage is not a major concern, a **hash table** would be a good choice.
+- If maintaining sorted order is important and the data set is not expected to be very large, a **binary search tree** (especially a self-balancing one) would be suitable.
+- If the application requires frequent access to courses by index and the data set is relatively small, a **vector** could be sufficient.
+
+For the given scenario, where both fast search and maintaining sorted order are important, a **balanced binary search tree** seems to be the most suitable option. It provides efficient search and insertion while maintaining sorted order, which is beneficial for printing the course list in alphanumeric order.
+/*-------------------------------------------------------------------------------*/
+
+Based on your previously submitted pseudocode and the requirements for this assignment, let's update and expand the pseudocode to include all necessary components while maintaining the same style. We'll focus on the vector data structure as an example, and you can apply similar logic to the hash table and tree structures.
+
+### Updated Pseudocode for Vector Data Structure
+
+#### Class Definition
+
+class Course:
+    courseNumber: String
+    courseName: String
+    prerequisites: Vector<String>
+```
+
+#### Function to Load Courses from File
+
+function loadCourses(filename: String) -> Vector<Course>:
+    courses = Vector<Course>()
+    file = open(filename)
+    for each line in file:
+        tokens = line.split(',')
+        course = Course(tokens[0], tokens[1], tokens[2:])
+        courses.append(course)
+    file.close()
+    return courses
+```
+
+#### Function to Print Course List in Alphanumeric Order
+
+function printCourseList(courses: Vector<Course>):
+    sortedCourses = sort(courses, by courseNumber)
+    for course in sortedCourses:
+        print(course.courseNumber, course.courseName)
+```
+
+#### Function to Print Course Information and Prerequisites
+
+function printCourseInformation(courses: Vector<Course>, courseNumber: String):
+    for course in courses:
+        if course.courseNumber == courseNumber:
+            print("Course Number:", course.courseNumber)
+            print("Course Name:", course.courseName)
+            if course.prerequisites.isEmpty():
+                print("No prerequisites found")
+            else:
+                print("Prerequisites:", course.prerequisites)
+            return
+    print("Course not found")
+```
+
+#### Menu Function
+
+function menu():
+    courses = Vector<Course>()
+    while true:
+        print("1. Load Data Structure")
+        print("2. Print Course List")
+        print("3. Print Course Information")
+        print("4. Exit")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            filename = input("Enter the filename: ")
+            courses = loadCourses(filename)
+        elif choice == "2":
+            if courses.isEmpty():
+                print("Please load the data structure first.")
+            else:
+                printCourseList(courses)
+        elif choice == "3":
+            if courses.isEmpty():
+                print("Please load the data structure first.")
+            else:
+                courseNumber = input("Enter the course number: ")
+                printCourseInformation(courses, courseNumber)
+        elif choice == "4":
+            break
+        else:
+            print("Invalid choice. Please try again.")
+```
+
+### Instructions for Applying Similar Logic to Hash Table and Tree Structures
+
+- For the hash table, use a `Hashtable<String, Course>` to store the courses, with the course number as the key. Update the `loadCourses`, `printCourseList`, and `printCourseInformation` functions accordingly.
+- For the tree structure, if using a binary search tree, ensure that the `loadCourses` function inserts courses in a way that maintains the tree's balance. The `printCourseList` function should perform an in-order traversal to print the courses in alphanumeric order.
+
+Once you've updated the pseudocode for all three data structures, you can proceed with the runtime analysis and decide which data structure is most suitable for the program's requirements.
+
+/*-------------------------------------------------------------------------------*/
+
+To complete this assignment, I'll provide the pseudocode for each of the data structures (vector, hash table, and tree) to address the requirements, perform a runtime analysis, and evaluate the advantages and disadvantages of each data structure.
+
+### Vector Pseudocode
+
+class Course:
+    courseNumber: String
+    courseName: String
+    prerequisites: Vector<String>
+
+Vector<Course> loadCourses(filename: String):
+    courses = Vector<Course>()
+    file = open(filename)
+    for line in file:
+        tokens = line.split(",")
+        course = Course(tokens[0], tokens[1], tokens[2:])
+        courses.append(course)
+    file.close()
+    return courses
+
+void printCourseList(Vector<Course> courses):
+    sort courses by courseNumber
+    for course in courses:
+        print(course.courseNumber, course.courseName)
+
+void printCourseInformation(Vector<Course> courses, courseNumber: String):
+    for course in courses:
+        if course.courseNumber == courseNumber:
+            print(course.courseName)
+            for prerequisite in course.prerequisites:
+                print(prerequisite)
+```
+
+### Hashtable Pseudocode
+
+class Course:
+    courseNumber: String
+    courseName: String
+    prerequisites: Vector<String>
+
+Hashtable<String, Course> loadCourses(filename: String):
+    courses = Hashtable<String, Course>()
+    file = open(filename)
+    for line in file:
+        tokens = line.split(",")
+        course = Course(tokens[0], tokens[1], tokens[2:])
+        courses.put(course.courseNumber, course)
+    file.close()
+    return courses
+
+void printCourseList(Hashtable<String, Course> courses):
+    courseList = courses.values()
+    sort courseList by courseNumber
+    for course in courseList:
+        print(course.courseNumber, course.courseName)
+
+void printCourseInformation(Hashtable<String, Course> courses, courseNumber: String):
+    if courses.containsKey(courseNumber):
+        course = courses.get(courseNumber)
+        print(course.courseName)
+        for prerequisite in course.prerequisites:
+            print(prerequisite)
+```
+
+### Tree Pseudocode
+
+class Course:
+    courseNumber: String
+    courseName: String
+    prerequisites: Vector<String>
+
+class TreeNode:
+    course: Course
+    left: TreeNode
+    right: TreeNode
+
+TreeNode loadCourses(filename: String):
+    root = null
+    file = open(filename)
+    for line in file:
+        tokens = line.split(",")
+        course = Course(tokens[0], tokens[1], tokens[2:])
+        root = insertCourse(root, course)
+    file.close()
+    return root
+
+TreeNode insertCourse(TreeNode node, Course course):
+    if node is null:
+        return TreeNode(course)
+    if course.courseNumber < node.course.courseNumber:
+        node.left = insertCourse(node.left, course)
+    else:
+        node.right = insertCourse(node.right, course)
+    return node
+
+void printCourseList(TreeNode node):
+    if node is not null:
+        printCourseList(node.left)
+        print(node.course.courseNumber, node.course.courseName)
+        printCourseList(node.right)
+
+void printCourseInformation(TreeNode node, courseNumber: String):
+    if node is not null:
+        if courseNumber == node.course.courseNumber:
+            print(node.course.courseName)
+            for prerequisite in node.course.prerequisites:
+                print(prerequisite)
+        else if courseNumber < node.course.courseNumber:
+            printCourseInformation(node.left, courseNumber)
+        else:
+            printCourseInformation(node.right, courseNumber)
+```
+
+### Runtime Analysis
+For each data structure, the runtime for loading courses from a file and creating course objects is O(n), where n is the number of courses. This is because each line in the file is read once and processed in constant time.
+
+The runtime for printing the course list and course information varies for each data structure:
+- Vector: O(n log n) for sorting the courses, and O(n) for printing the course list and course information.
+- Hashtable: O(n) for printing the course list (assuming sorting is done on a separate list of course numbers), and O(1) for printing course information.
+- Tree: O(n) for printing the course list in sorted order (in-order traversal), and O(log n) for printing course information (assuming a balanced tree).
+
+### Evaluation
+- **Vector**: Easy to implement and provides direct access to elements. However, sorting is required to print the courses in alphanumeric order, which increases the runtime.
+- **Hashtable**: Provides fast access to course information, but does not maintain order, so additional sorting is required for printing the course list.
+- **Tree**: Maintains courses in sorted order, providing efficient printing of the course list. However, it requires more complex implementation and balancing to ensure optimal performance.
+
+Based on the requirements, a tree data structure might be the best choice for this application, as it efficiently supports both printing the course list in sorted order and accessing course information. However, if the focus is more on fast access to individual course information rather than printing
